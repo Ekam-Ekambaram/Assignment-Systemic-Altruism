@@ -1,0 +1,59 @@
+
+import React, { useState } from 'react';
+import { View, Button, Image, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+
+const UploadPhoto = () => {
+  const [photo, setPhoto] = useState(null);
+  const [tattooDesign, setTattooDesign] = useState('https://via.placeholder.com/150');
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.uri);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Upload Photo" onPress={pickImage} />
+      {photo && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: photo }} style={styles.image} />
+          <Image source={{ uri: tattooDesign }} style={styles.overlay} />
+        </View>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  imageContainer: {
+    position: 'relative',
+  },
+  image: {
+    width: 300,
+    height: 300,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 100,
+    height: 100,
+    opacity: 0.8,
+  },
+});
+
+export default UploadPhoto;
